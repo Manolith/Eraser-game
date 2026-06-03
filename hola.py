@@ -58,8 +58,41 @@ def instructions_en():
             print(qText)
             input("Press Enter to continue...")
             clean_terminal()
+
         elif option == 2:
-            print(2)
+            insText = dedent(
+                """
+
+            -The starting player must choose a category and will be assigned a concept.
+            They must then write clues according to the number of players in the game.
+            -The next player receives a list of clues written by the player who was assigned the concept.
+            They must try to guess the concept and write down their answer. Finally, they must remove one clue, so the following player receives fewer clues.
+            -The game continues following the same process until it is once again the turn of the player who was assigned the concept.
+
+            """
+            )
+            eText = dedent(
+                """
+
+
+
+            """
+            )
+            pText = dedent(
+                """
+
+
+
+            """
+            )
+
+            print(insText)
+            input("Press Enter to continue...")
+            print(eText)
+            input("Press Enter to continue...")
+            print(pText)
+            input("Press Enter to exit...")
+            clean_terminal()
 
 
 def instructions_es():
@@ -102,8 +135,69 @@ def instructions_es():
 
         # Opción instrucciones
         elif option == 2:
-            print(2)
-            input("Presiona Enter para continuar.")
+            insText = dedent(
+                """
+
+            -El jugador inicial deberá escoger una categoría y se le asignará un concepto,
+            este debe escribir pistas de acuerdo a la cantidad de jugadores en la partida.
+            -El siguiente jugador recibe una lista con las pistas del jugador al que se le
+            asignó un concepto. Este debe intentar adivinar el concepto y escribirlo. Por
+            último deberá eliminar una pista, lo cual el siguiente jugador recibe menos pistas.
+            -El juego sigue la misma dinámica hasta que vuelve a ser el turno del jugador que
+            recibe el concepto.
+
+            """
+            )
+            eText = dedent(
+                """
+
+            Ejemplo de ronda:
+            Una partida de 3 jugadores...
+            -Turno jugador 1:
+            El jugador 1 escoge la categoría One piece y recibe el concepto Luffy, este
+            debe escribir 3 pistas y escribe [Sombrero, capitán, protagonista].
+            -Turno jugador 2:
+            El jugador 2 recibe las pistas [Sombrero, capitán, protagonista] y debe
+            escribir el concepto que cree que tiene el jugador 1. Ahora debe escoger que
+            pista eliminar y en este caso quiere eliminar [protagonista].
+            -Turno jugador 3:
+            El jugador 2 recibe las pistas [Sombrero, capitán] y debe escribir el
+            concepto que cree que tiene el jugador 1.
+            -Luego se revela el concepto y se asignan los puntajes correspondientes.
+
+            """
+            )
+
+            pText = dedent(
+                """
+
+            Puntaje:
+            Al jugador que recibe el concepto se le otorga 1 punto por cada persona que
+            haya adivinado la palabra.
+            Los jugadores que adivinaron el concepto reciben un punto.
+            -----------------------------------------------------------------------------
+                        Concepto   |   Puntaje    |    Palabra
+            Jugador 1 : Luffy      |      1       |   ---------
+            Jugador 2 : Luffy      |      1       |   Luffy
+            Jugador 3 : Luffy      |      0       |   Buggy
+            -----------------------------------------------------------------------------
+                                          o
+            -----------------------------------------------------------------------------
+                        Concepto   |   Puntaje    |    Palabra
+            Jugador 1 : Luffy      |      2       |   ---------
+            Jugador 2 : Luffy      |      1       |   Luffy
+            Jugador 3 : Luffy      |      1       |   Luffy
+            -----------------------------------------------------------------------------
+
+            """
+            )
+
+            print(insText)
+            input("Presiona Enter para continuar...")
+            print(eText)
+            input("Presiona Enter para continuar...")
+            print(pText)
+            input("Presiona Enter para salir...")
             clean_terminal()
 
 
