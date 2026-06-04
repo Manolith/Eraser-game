@@ -1,26 +1,377 @@
 import random
 import time
+from asyncio.events import set_event_loop_policy
 from textwrap import dedent
 
 
 def main():
+    """
+    1-one piece
+    2-dragon ball
+    3-naruto
+    4-spokon
+    5-isekai
+    """
+
+    concepts = {
+        "es": {
+            1: [
+                "Luffy",
+                "Zoro",
+                "Nami",
+                "Usopp",
+                "Sanji",
+                "Chopper",
+                "Robin",
+                "Franky",
+                "Brook",
+                "Jinbe",
+                "Shanks",
+                "Ace",
+                "Sabo",
+                "Barbanegra",
+                "Law",
+                "Kid",
+                "Mihawk",
+                "Buggy",
+                "Akainu",
+                "Kaido",
+                "Big Mom",
+                "Fruta del Diablo",
+                "Haki",
+                "Grand Line",
+                "One Piece",
+                "Going Merry",
+                "Thousand Sunny",
+                "Marina",
+                "Yonko",
+                "Sombrero de Paja",
+            ],
+            2: [
+                "Goku",
+                "Vegeta",
+                "Gohan",
+                "Trunks",
+                "Piccolo",
+                "Krillin",
+                "Bulma",
+                "Freezer",
+                "Cell",
+                "Majin Buu",
+                "Beerus",
+                "Whis",
+                "Broly",
+                "Jiren",
+                "Yamcha",
+                "Tenshinhan",
+                "Maestro Roshi",
+                "Shenlong",
+                "Esferas del Dragon",
+                "Kamehameha",
+                "Genkidama",
+                "Super Saiyajin",
+                "Fusion",
+                "Capsula Corp",
+                "Torneo de Poder",
+                "Nube Voladora",
+                "Saiyajin",
+                "Namekusei",
+                "Radar del Dragon",
+                "Habitacion del Tiempo",
+            ],
+            3: [
+                "Naruto",
+                "Sasuke",
+                "Sakura",
+                "Kakashi",
+                "Jiraiya",
+                "Tsunade",
+                "Orochimaru",
+                "Itachi",
+                "Gaara",
+                "Hinata",
+                "Shikamaru",
+                "Rock Lee",
+                "Neji",
+                "Madara",
+                "Obito",
+                "Pain",
+                "Minato",
+                "Kurama",
+                "Hokage",
+                "Sharingan",
+                "Rinnegan",
+                "Rasengan",
+                "Chidori",
+                "Akatsuki",
+                "Aldea de la Hoja",
+                "Examen Chunin",
+                "Bijuu",
+                "Chakra",
+                "Jutsu",
+                "Sello de Invocacion",
+            ],
+            4: [
+                "Haikyuu",
+                "Hinata Shoyo",
+                "Kageyama Tobio",
+                "Karasuno",
+                "Nekoma",
+                "Slam Dunk",
+                "Hanamichi Sakuragi",
+                "Rukawa",
+                "Shohoku",
+                "Kuroko no Basket",
+                "Kuroko Tetsuya",
+                "Kagami Taiga",
+                "Generacion de los Milagros",
+                "Blue Lock",
+                "Isagi Yoichi",
+                "Bachira Meguru",
+                "Capitan",
+                "Entrenador",
+                "Torneo nacional",
+                "Campeonato",
+                "Partido",
+                "Equipo",
+                "Rival",
+                "Victoria",
+                "Derrota",
+                "Voleibol",
+                "Baloncesto",
+                "Futbol",
+                "Entrenamiento",
+                "Trabajo en equipo",
+            ],
+            5: [
+                "Reencarnacion",
+                "Mundo paralelo",
+                "Invocacion de heroe",
+                "Rey Demonio",
+                "Aventurero",
+                "Gremio",
+                "Mazmorra",
+                "Nivel",
+                "Experiencia",
+                "Habilidad unica",
+                "Magia",
+                "Espadachin",
+                "Sanador",
+                "Arquero",
+                "Bestia magica",
+                "Elfo",
+                "Enano",
+                "Dragon",
+                "Reino",
+                "Princesa",
+                "Demonio",
+                "Espiritu",
+                "Objeto legendario",
+                "Jefe final",
+                "Mision",
+                "Inventario",
+                "Teletransporte",
+                "Sobrepotenciado",
+                "Clase secreta",
+                "Nivel maximo",
+            ],
+            6: [
+                "Ingrese la cantidad de jugadores",
+                "Ingrese los nombres de los jugadores",
+                "Ingrese la cantidad de rondas a jugar",
+                "Turno de ",
+                "Escoge una categoría",
+                "Escribe tu pista",
+                "Pistas",
+                "Ingresa tu respuesta",
+            ],
+        },
+        "en": {
+            1: [
+                "Luffy",
+                "Zoro",
+                "Nami",
+                "Usopp",
+                "Sanji",
+                "Chopper",
+                "Robin",
+                "Franky",
+                "Brook",
+                "Jinbe",
+                "Shanks",
+                "Ace",
+                "Sabo",
+                "Blackbeard",
+                "Law",
+                "Kid",
+                "Mihawk",
+                "Buggy",
+                "Akainu",
+                "Kaido",
+                "Big Mom",
+                "Devil Fruit",
+                "Haki",
+                "Grand Line",
+                "One Piece",
+                "Going Merry",
+                "Thousand Sunny",
+                "Marines",
+                "Emperor",
+                "Straw Hat",
+            ],
+            2: [
+                "Goku",
+                "Vegeta",
+                "Gohan",
+                "Trunks",
+                "Piccolo",
+                "Krillin",
+                "Bulma",
+                "Frieza",
+                "Cell",
+                "Majin Buu",
+                "Beerus",
+                "Whis",
+                "Broly",
+                "Jiren",
+                "Yamcha",
+                "Tien Shinhan",
+                "Master Roshi",
+                "Shenron",
+                "Dragon Balls",
+                "Kamehameha",
+                "Spirit Bomb",
+                "Super Saiyan",
+                "Fusion",
+                "Capsule Corp",
+                "Tournament of Power",
+                "Flying Nimbus",
+                "Saiyan",
+                "Namek",
+                "Dragon Radar",
+                "Hyperbolic Time Chamber",
+            ],
+            3: [
+                "Naruto",
+                "Sasuke",
+                "Sakura",
+                "Kakashi",
+                "Jiraiya",
+                "Tsunade",
+                "Orochimaru",
+                "Itachi",
+                "Gaara",
+                "Hinata",
+                "Shikamaru",
+                "Rock Lee",
+                "Neji",
+                "Madara",
+                "Obito",
+                "Pain",
+                "Minato",
+                "Kurama",
+                "Hokage",
+                "Sharingan",
+                "Rinnegan",
+                "Rasengan",
+                "Chidori",
+                "Akatsuki",
+                "Hidden Leaf Village",
+                "Chunin Exam",
+                "Tailed Beast",
+                "Chakra",
+                "Jutsu",
+                "Summoning Technique",
+            ],
+            4: [
+                "Haikyuu",
+                "Shoyo Hinata",
+                "Tobio Kageyama",
+                "Karasuno",
+                "Nekoma",
+                "Slam Dunk",
+                "Hanamichi Sakuragi",
+                "Rukawa",
+                "Shohoku",
+                "Kuroko no Basket",
+                "Tetsuya Kuroko",
+                "Taiga Kagami",
+                "Generation of Miracles",
+                "Blue Lock",
+                "Yoichi Isagi",
+                "Meguru Bachira",
+                "Captain",
+                "Coach",
+                "National Tournament",
+                "Championship",
+                "Match",
+                "Team",
+                "Rival",
+                "Victory",
+                "Defeat",
+                "Volleyball",
+                "Basketball",
+                "Soccer",
+                "Training",
+                "Teamwork",
+            ],
+            5: [
+                "Reincarnation",
+                "Parallel World",
+                "Hero Summoning",
+                "Demon King",
+                "Adventurer",
+                "Guild",
+                "Dungeon",
+                "Level",
+                "Experience",
+                "Unique Skill",
+                "Magic",
+                "Swordsman",
+                "Healer",
+                "Archer",
+                "Magic Beast",
+                "Elf",
+                "Dwarf",
+                "Dragon",
+                "Kingdom",
+                "Princess",
+                "Demon",
+                "Spirit",
+                "Legendary Item",
+                "Final Boss",
+                "Quest",
+                "Inventory",
+                "Teleportation",
+                "Overpowered",
+                "Hidden Class",
+                "Max Level",
+            ],
+            6: [
+                "Enter the number of players",
+                "Enter the players' names",
+                "Enter the number of rounds to play",
+                "'s turn",
+                "Choose a category",
+                "Enter your clue",
+                "Clues",
+                "Enter your guess"
+            ],
+        },
+    }
+
     language = int(input("Welcome!\nSelect a language\n1-English\n2-Spanish\n"))
     clean_terminal()
     while not 0 < language < 3:
-        language = int(input("Select a valid option: "))
+        language = int(input("Select a valid language\n1-English\n2-Spanish\n"))
+        clean_terminal()
 
     if language == 1:
-        english()
+        # instructions_en()
+        game(concepts, "en")
     else:
-        spanish()
-
-
-def spanish():
-    instructions_es()
-
-
-def english():
-    instructions_en()
+        # instructions_es()
+        game(concepts, "es")
 
 
 def instructions_en():
@@ -74,14 +425,50 @@ def instructions_en():
             eText = dedent(
                 """
 
+            Example Round:
 
+            A 3-player game...
+
+            -Player 1's turn:
+            Player 1 chooses the One Piece category and is assigned the concept "Luffy".
+            They must write 3 clues and choose: [Hat, Captain, Protagonist]
+
+            -Player 2's turn:
+            Player 2 receives the clues:
+            [Hat, Captain, Protagonist]
+
+            They must write down the concept they believe Player 1 was assigned. Then, they must choose one clue to remove.
+            In this case, they decide to remove: [Protagonist]
+
+            -Player 3's turn:
+            Player 3 receives the clues: [Hat, Captain]
+            They must write down the concept they believe Player 1 was assigned.
+
+            -End of the round:
+            The concept is revealed, and the corresponding points are awarded.
 
             """
             )
             pText = dedent(
                 """
 
+            Scoring:
 
+            The player who was assigned the concept receives 1 point for each player who correctly guesses the word.
+            Players who correctly guess the concept receive 1 point each.
+            -----------------------------------------------------------------------------
+                        Concept    |   Guess      |    Score
+            Player  1 : Luffy      |  ---------   |      1
+            Player  2 :   ?        |    Luffy     |      1
+            Player  3 :   ?        |    Buggy     |      0
+            -----------------------------------------------------------------------------
+                                          or
+            -----------------------------------------------------------------------------
+                        Concept    |   Guess      |    Score
+            Player  1 : Luffy      |  ---------   |      2
+            Player  2 :   ?        |    Luffy     |      1
+            Player  3 :   ?        |    Luffy     |      1
+            -----------------------------------------------------------------------------
 
             """
             )
@@ -153,17 +540,22 @@ def instructions_es():
 
             Ejemplo de ronda:
             Una partida de 3 jugadores...
+
             -Turno jugador 1:
             El jugador 1 escoge la categoría One piece y recibe el concepto Luffy, este
             debe escribir 3 pistas y escribe [Sombrero, capitán, protagonista].
+
             -Turno jugador 2:
             El jugador 2 recibe las pistas [Sombrero, capitán, protagonista] y debe
             escribir el concepto que cree que tiene el jugador 1. Ahora debe escoger que
             pista eliminar y en este caso quiere eliminar [protagonista].
+
             -Turno jugador 3:
-            El jugador 2 recibe las pistas [Sombrero, capitán] y debe escribir el
+            El jugador 3 recibe las pistas [Sombrero, capitán] y debe escribir el
             concepto que cree que tiene el jugador 1.
-            -Luego se revela el concepto y se asignan los puntajes correspondientes.
+
+            -Final de la ronda:
+            Se revela el concepto y se asignan los puntajes correspondientes.
 
             """
             )
@@ -176,17 +568,17 @@ def instructions_es():
             haya adivinado la palabra.
             Los jugadores que adivinaron el concepto reciben un punto.
             -----------------------------------------------------------------------------
-                        Concepto   |   Puntaje    |    Palabra
-            Jugador 1 : Luffy      |      1       |   ---------
-            Jugador 2 : Luffy      |      1       |   Luffy
-            Jugador 3 : Luffy      |      0       |   Buggy
+                        Concepto   |   Palabra    |    Puntaje
+            Jugador 1 : Luffy      |  ---------   |       1
+            Jugador 2 :   ?        |    Luffy     |       1
+            Jugador 3 :   ?        |    Buggy     |       0
             -----------------------------------------------------------------------------
                                           o
             -----------------------------------------------------------------------------
-                        Concepto   |   Puntaje    |    Palabra
-            Jugador 1 : Luffy      |      2       |   ---------
-            Jugador 2 : Luffy      |      1       |   Luffy
-            Jugador 3 : Luffy      |      1       |   Luffy
+                        Concepto   |   Palabra    |    Puntaje
+            Jugador 1 : Luffy      |  ---------   |       2
+            Jugador 2 :   ?        |    Luffy     |       1
+            Jugador 3 :   ?        |    Luffy     |       1
             -----------------------------------------------------------------------------
 
             """
@@ -201,11 +593,69 @@ def instructions_es():
             clean_terminal()
 
 
+def game(concepts, lang):
+    """
+    # setup game
+    cPlayers = int(input(f"{concepts[6][2]}: "))
+    players = []
+    for i in range(cPlayers):
+        player = input(f"{concepts[6][1]}: ")
+        players.append(player)
+    cRounds = int(input(f"{concepts[6][2]}: "))
+    """
+    # Create category lists
+    op_list = concepts[lang][0]
+    db_list = concepts[lang][1]
+    na_list = concepts[lang][2]
+    sp_list = concepts[lang][3]
+    is_list = concepts[lang][4]
+    # shuffle lists player's turn
+    #  random.shuffle(players)
+    for cp in range(cPlayers):
+
+        if lang == "es"
+            print(f"{concepts[lang][6][4]} {players[cp]}")
+        else:
+            print(f"{players[cp]}{concepts[lang][6][4]}")
+
+        category = int(
+            input(
+                f"{concepts[lang][6][4]}: \n1-One Piece\n2-Dragon Ball\n3-Naruto\n4-Spokon\n5-Isekai\n"
+            )
+        )
+        while not 0 < category < 6:
+            clean_terminal()
+            category = int(
+                input(
+                    f"{concepts[lang][6][4]}: \n1-One Piece\n2-Dragon Ball\n3-Naruto\n4-Spokon\n5-Isekai\n"
+                )
+            )
+
+        list = concepts[lang][category]
+        random.shuffle(list)
+
+        print(list)
+        print(list.pop())
+        print(list)
+        # Create list of clues
+        clues = []
+        for c in range(cPlayers):
+            clue = input(f"{concepts[6][5]}:\n")
+            clues.append(clue)
+
+        for i in range(cPlayers - 1):
+            cp += 1
+            if lang == "es"
+                print(f"{concepts[lang][6][4]} {players[cp]}\n")
+            else:
+                print(f"{players[cp]}{concepts[lang][6][4]}\n")
+
+            print(f"\n{concepts[lang][6][6]}\n")
+            for l in clues:
+                print(f"1-{l}")
+            guess_players[cp] = input(f"{concepts[lang][6][7]}")
+
 def score():
-    pass
-
-
-def game():
     pass
 
 
