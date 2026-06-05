@@ -1,6 +1,5 @@
 import random
 import time
-from asyncio.events import set_event_loop_policy
 from textwrap import dedent
 
 
@@ -184,6 +183,7 @@ def main():
                 "Escribe tu pista",
                 "Pistas",
                 "Ingresa tu respuesta",
+                "Esta es tu palabra ",
             ],
         },
         "en": {
@@ -349,13 +349,14 @@ def main():
             ],
             6: [
                 "Enter the number of players",
-                "Enter the players' names",
+                "Enter the players names",
                 "Enter the number of rounds to play",
                 "'s turn",
                 "Choose a category",
                 "Enter your clue",
                 "Clues",
-                "Enter your guess"
+                "Enter your guess",
+                "Your assigned concept is: ",
             ],
         },
     }
@@ -594,66 +595,105 @@ def instructions_es():
 
 
 def game(concepts, lang):
-    """
+
     # setup game
-    cPlayers = int(input(f"{concepts[6][2]}: "))
+    cPlayers = int(input(f"{concepts[lang][6][0]}: "))
     players = []
     for i in range(cPlayers):
-        player = input(f"{concepts[6][1]}: ")
+        player = input(f"{concepts[lang][6][1]}: ")
         players.append(player)
-    cRounds = int(input(f"{concepts[6][2]}: "))
-    """
+    cRounds = int(input(f"{concepts[lang][6][2]}: "))
+    clean_terminal()
     # Create category lists
-    op_list = concepts[lang][0]
-    db_list = concepts[lang][1]
-    na_list = concepts[lang][2]
-    sp_list = concepts[lang][3]
-    is_list = concepts[lang][4]
+    op_list = concepts[lang][1]
+    db_list = concepts[lang][2]
+    na_list = concepts[lang][3]
+    sp_list = concepts[lang][4]
+    is_list = concepts[lang][5]
     # shuffle lists player's turn
-    #  random.shuffle(players)
+    random.shuffle(players)
+    # The player who gives the clues
+    start_player(
+        concepts,
+        lang,
+        cPlayers,
+        players,
+        cRounds,
+        op_list,
+        db_list,
+        na_list,
+        sp_list,
+        is_list,
+    )
+    clean_terminal()
+
     for cp in range(cPlayers):
-
-        if lang == "es"
-            print(f"{concepts[lang][6][4]} {players[cp]}")
+        if lang == "es":
+            print(f"{concepts[lang][6][3]}{players[cp]}")
         else:
-            print(f"{players[cp]}{concepts[lang][6][4]}")
+            print(f"{players[cp]}{concepts[lang][6][3]}")
 
+        print(cp)
+        time.sleep(3)
+        # Guessing turns
+        for i in range(cPlayers - 1):
+            cp += 1
+            print(cp)
+            if lang == "es":
+                print(f"{concepts[lang][6][3]}{players[cp]}\n")
+            else:
+                print(f"{players[cp]}{concepts[lang][6][3]}\n")
+
+            print(f"\n{concepts[lang][6][6]}\n")
+            for l in clues:
+                print(f"-{l}")
+            # guess_players[cp] = input(f"{concepts[lang][6][7]}")
+
+
+def start_player(
+    concepts,
+    lang,
+    cPlayers,
+    players,
+    cRoounds,
+    op_list,
+    db_list,
+    na_list,
+    sp_list,
+    is_list,
+):
+    category = int(
+        input(
+            f"{concepts[lang][6][4]}: \n1-One Piece\n2-Dragon Ball\n3-Naruto\n4-Spokon\n5-Isekai\n"
+        )
+    )
+    while not 0 < category < 6:
+        clean_terminal()
         category = int(
             input(
                 f"{concepts[lang][6][4]}: \n1-One Piece\n2-Dragon Ball\n3-Naruto\n4-Spokon\n5-Isekai\n"
             )
         )
-        while not 0 < category < 6:
-            clean_terminal()
-            category = int(
-                input(
-                    f"{concepts[lang][6][4]}: \n1-One Piece\n2-Dragon Ball\n3-Naruto\n4-Spokon\n5-Isekai\n"
-                )
-            )
 
-        list = concepts[lang][category]
-        random.shuffle(list)
+    list = concepts[lang][category]
+    random.shuffle(list)
 
-        print(list)
-        print(list.pop())
-        print(list)
-        # Create list of clues
-        clues = []
-        for c in range(cPlayers):
-            clue = input(f"{concepts[6][5]}:\n")
-            clues.append(clue)
+    # print(list)
+    guess = list.pop()
+    print(f"{concepts[lang][6][8]}{guess}")
+    # print(list)
+    # Create list of clues
+    clues = []
+    for c in range(cPlayers):
+        clue = input(f"{concepts[lang][6][5]}:\n")
+        clues.append(clue)
 
-        for i in range(cPlayers - 1):
-            cp += 1
-            if lang == "es"
-                print(f"{concepts[lang][6][4]} {players[cp]}\n")
-            else:
-                print(f"{players[cp]}{concepts[lang][6][4]}\n")
+    clean_terminal()
 
-            print(f"\n{concepts[lang][6][6]}\n")
-            for l in clues:
-                print(f"1-{l}")
-            guess_players[cp] = input(f"{concepts[lang][6][7]}")
+
+def other_players():
+    pass
+
 
 def score():
     pass
