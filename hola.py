@@ -186,6 +186,17 @@ def main():
                 "Esta es tu palabra: ",
                 "Siguiente turno para adivinar comienza en...",
                 "Siguiente turno para escribir pistas comienza en...",
+                "Ingresa el número de la pista que deseas eliminar: ",
+            ],
+            # Lista para validar datos
+            7: [
+                "Ingresa un valor correcto",
+                "El jugador ",
+                "tiene ",
+                "puntos.",
+                "punto.",
+                "El ganador es ",
+                "con",
             ],
         },
         "en": {
@@ -357,10 +368,20 @@ def main():
                 "Choose a category",
                 "Enter your clue: ",
                 "Clues",
-                "Enter your guess",
+                "Enter your guess: ",
                 "Your assigned concept is: ",
                 "Next turn to guess starts in...",
                 "Next turn to enter clues starts in...",
+                "Enter the number of the clue you want to remove: ",
+            ],
+            7: [
+                "Enter a valid value",
+                "Player ",
+                "has",
+                "points.",
+                "point.",
+                "The winner is ",
+                "with ",
             ],
         },
     }
@@ -601,13 +622,31 @@ def instructions_es():
 def game(concepts, lang):
 
     # setup game
-    cPlayers = int(input(f"{concepts[lang][6][0]}: "))
+    while True:
+        try:
+            cPlayers = int(input(f"{concepts[lang][6][0]} "))
+            if 3 <= cPlayers <= 6:
+                break
+        except ValueError:
+            print(f"{concepts[lang][7][0]}")
+
     players = []
     for i in range(cPlayers):
-        player = input(f"{concepts[lang][6][1]}: ")
+        player = input(f"{concepts[lang][6][1]} ")
         players.append(player)
-    cRounds = int(input(f"{concepts[lang][6][2]}: "))
+
+    while True:
+        try:
+            cRounds = int(input(f"{concepts[lang][6][2]} "))
+            break
+        except ValueError:
+            print(f"{concepts[lang][7][0]}")
+
     clean_terminal()
+    # dictionary to alojate points
+    dPlayers = {}
+    for player in players:
+        dPlayers[player] = 0
     # Create category lists
     op_list = concepts[lang][1]
     db_list = concepts[lang][2]
@@ -618,6 +657,7 @@ def game(concepts, lang):
     random.shuffle(players)
     # Variable to know the positions of players
     turn = 0
+    lastPlayer = players[-1]
     for player in players:
         if lang == "es":
             print(f"{concepts[lang][6][3]}{player}\n")
@@ -637,11 +677,40 @@ def game(concepts, lang):
             sp_list,
             is_list,
         )
-        other_players(concepts, lang, clues, guess, players, turn)
+        other_players(concepts, lang, clues, guess, players, turn, dPlayers)
         turn += 1
         clean_terminal()
-        next_playerC(concepts, lang)
+        if player != lastPlayer:
+            next_playerC(concepts, lang)
+            for key, value in dPlayers.items():
+                if key > 1 or key < 1:
+                    points = concepts[lang][7][3]
+                else:
+                    points = concepts[lang][7][4]
+
+                print(
+                    f"{concepts[lang][7][1]}{key} {concepts[lang][7][2]}{value} {points}"
+                )
+
         clean_terminal()
+
+    for key, value in dPlayers.items():
+        if key > 1 or key < 1:
+            points = concepts[lang][7][3]
+        else:
+            points = concepts[lang][7][4]
+
+        print(f"{concepts[lang][7][1]}{key} {concepts[lang][7][2]}{value} {points}")
+        winner = -1
+        pWinner = ""
+
+        if value > winner:
+            winner = value
+            pWinner = key
+
+    print(
+        f"\n\n{concepts[lang][7][5]}{pWinner} {concepts[lang][7][6]} {dPlayers[pWinner]} {concepts[lang][7][3]}"
+    )
 
 
 def start_player(
@@ -656,18 +725,19 @@ def start_player(
     sp_list,
     is_list,
 ):
-    category = int(
-        input(
-            f"{concepts[lang][6][4]}: \n1-One Piece\n2-Dragon Ball\n3-Naruto\n4-Spokon\n5-Isekai\n"
-        )
-    )
-    while not 0 < category < 6:
-        # clean_terminal()
-        category = int(
-            input(
-                f"{concepts[lang][6][4]}: \n1-One Piece\n2-Dragon Ball\n3-Naruto\n4-Spokon\n5-Isekai\n"
+    while True:
+        try:
+            category = int(
+                input(
+                    f"{concepts[lang][6][4]}:\n \n1-One Piece\n2-Dragon Ball\n3-Naruto\n4-Spokon\n5-Isekai\n"
+                )
             )
-        )
+
+            if 1 <= category <= 5:
+                break
+            print(f"{concepts[lang][7][0]}")
+        except ValueError:
+            print(f"{concepts[lang][7][0]}")
 
     clean_terminal()
     list = concepts[lang][category]
@@ -680,7 +750,7 @@ def start_player(
     # Create list of clues
     clues = []
     for c in range(cPlayers):
-        clue = input(f"{concepts[lang][6][5]}:\n")
+        clue = input(f"{concepts[lang][6][5]}\n")
         clues.append(clue)
 
     clean_terminal()
@@ -688,19 +758,14 @@ def start_player(
     return clues, guess
 
 
-def other_players(concepts, lang, clues, guess, players, turn):
+def other_players(concepts, lang, clues, guess, players, turn, dPlayers):
     # Change start_player position to skip
     lPlayers = players.copy()
-    # print(lPlayers)
     noGuesser = lPlayers.pop(turn)
-    # print(noGuesser)
     lastGuesser = lPlayers.pop(turn - 1)
-    # print(lastGuesser)
-    # print(lPlayers)
     lPlayers.append(lastGuesser)
     lPlayers.append(noGuesser)
 
-    # print(lPlayers)
     # Guessing turns
     for i in range(len(lPlayers) - 1):
         if lang == "es":
@@ -711,17 +776,36 @@ def other_players(concepts, lang, clues, guess, players, turn):
         time.sleep(3)
 
         print(f"\n{concepts[lang][6][6]}\n")
-        print(clues)
         nClue = 1
         for clue in clues:
             print(f"{nClue}-{clue}")
             nClue += 1
 
+        pGuess = input(f"{concepts[lang][6][7]}")
+
+        while True:
+            try:
+                eClue = int(input(f"{concepts[lang][6][11]}"))
+                if 1 <= eClue <= len(clues):
+                    break
+                print(f"{concepts[lang][7][0]}")
+            except ValueError:
+                print(f"{concepts[lang][7][0]}")
+
+        clues.pop(eClue - 1)
+        if pGuess.lower() == guess.lower():
+            dPlayers[lPlayers[i]] += 1
+            dPlayers[noGuesser] += 1
+
         clean_terminal()
+
+        # End turn
         check = 2
         if (check + i) != len(players):
             next_player(concepts, lang)
             clean_terminal()
+
+    return dPlayers
 
 
 def next_player(concepts, lang):
@@ -736,10 +820,6 @@ def next_playerC(concepts, lang):
     for i in range(5, -1, -1):
         print(i)
         time.sleep(1)
-
-
-def score():
-    pass
 
 
 def clean_terminal():
