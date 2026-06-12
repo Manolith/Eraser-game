@@ -716,12 +716,10 @@ def game(concepts, lang):
             points = concepts[lang][7][4]
 
         print(f"{concepts[lang][7][1]}{key} {concepts[lang][7][2]}{value} {points}")
-        winner = 0
-        pWinner = ""
 
-        if value >= winner:
-            winner = value
-            pWinner = key
+    winner = max(dPlayers.values())
+    for key, value in dPlayers.items():
+        if value == winner:
             pWinnerl.append(key)
 
     if len(pWinnerl) > 1:
@@ -742,6 +740,7 @@ def game(concepts, lang):
                 )
 
     else:
+        pWinner = pWinnerl[0]
         print(
             f"\n\n{concepts[lang][7][5]}{pWinner} {concepts[lang][7][6]} {dPlayers[pWinner]} {concepts[lang][7][3]}"
         )
@@ -775,7 +774,8 @@ def start_player(
 
     clean_terminal()
     list = concepts[lang][category]
-    random.shuffle(list)
+    for r in range(10):
+        random.shuffle(list)
 
     # print(list)
     guess = list.pop()
@@ -822,7 +822,7 @@ def other_players(concepts, lang, clues, guess, players, turn, dPlayers):
             print(f"{nClue}-{clue}")
             nClue += 1
 
-        pGuess = input(f"{concepts[lang][6][7]}")
+        pGuess = input(f"\n{concepts[lang][6][7]}")
 
         while True:
             try:
